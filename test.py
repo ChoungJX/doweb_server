@@ -44,6 +44,18 @@ for i in range(255):
         },
     )
 
+data2 = list()
+for i in range(255):
+    data2.append(
+        {
+            "ip":"172.18.2.%s"%(i),
+            "name":"xxx",
+            "status":'在线',
+            "id":str(uuid.uuid4()),
+            "server_ip":"10.12.1.2",
+        },
+    )
+
 
 @app.route("/api",methods=["POST"])
 def aaa():
@@ -128,5 +140,31 @@ def aaa():
                     'status':-1
                 }
             )
+    elif method == "container_info":
+        page = request.json.get("page_current") - 1
+        need_number = request.json.get("need")
+
+        start = page*need_number
+
+        data = data2[start:start+need_number]
+        return jsonify(
+            {
+                "total":len(data2),
+                "data":data
+            }
+        )
+    
+    elif method == "container_delete":
+        get_id = request.json.get("id")
+        for i in range(len(data2)):
+            if data2[i]["id"] == get_id:
+                del data2[i]
+                break
+        
+        return jsonify(
+            {
+                "status":0,
+            }
+        )
 
 app.run(host="0.0.0.0",port=4000,debug=True)
