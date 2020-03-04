@@ -34,22 +34,22 @@ def login():
 
 
 data1 = list()
-for i in range(255):
+for i in range(6):
     data1.append(
         {
             "ip":"172.18.2.%s"%(i),
-            "name":"xxx",
+            "name":"%s"%(i),
             "status":'在线',
             "id":str(uuid.uuid4()),
         },
     )
 
 data2 = list()
-for i in range(255):
+for i in range(10):
     data2.append(
         {
             "ip":"172.18.2.%s"%(i),
-            "name":"xxx",
+            "name":"%s"%(i),
             "status":'在线',
             "id":str(uuid.uuid4()),
             "server_ip":"10.12.1.2",
@@ -164,6 +164,27 @@ def aaa():
         return jsonify(
             {
                 "status":0,
+            }
+        )
+    
+    elif method == "one_container_info":
+        get_id = request.json.get("id")
+        get_ip = request.json.get("server_ip")
+
+        result = dict()
+        for i in range(len(data2)):
+            if data2[i]["id"] == get_id:
+                result =  data2[i]
+        return jsonify(
+            {
+                'data':str(result)
+            }
+        )
+
+    elif method == "server_info_all":
+        return jsonify(
+            {
+                "data":data1,
             }
         )
 
