@@ -56,6 +56,26 @@ for i in range(10):
         },
     )
 
+data3 = [
+    {
+        'ip':'172.17.0',
+        'name':'briage',
+    },
+    {
+        'ip':'172.18.0',
+        'name':'myNetwork',
+    },
+]
+
+data4 = [
+    {
+        'name':'ubuntu:16.04',
+    },
+    {
+        'name':'centos:7',
+    },
+]
+
 
 @app.route("/api",methods=["POST"])
 def aaa():
@@ -187,5 +207,28 @@ def aaa():
                 "data":data1,
             }
         )
+    
+    elif method == "server_network_info":
+        return jsonify(
+            {
+                "data":data3,
+            }
+        )
+    
+    elif method == "server_image_info":
+        return jsonify(
+            {
+                "data":data4,
+            }
+        )
+    
+    elif method == "container_add":
+        return jsonify(
+            {
+                "uuid":str(uuid.uuid4()),
+                "status":0
+            }
+        )
+
 
 app.run(host="0.0.0.0",port=4000,debug=True)
