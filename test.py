@@ -34,7 +34,7 @@ def login():
 
 
 data1 = list()
-for i in range(6):
+for i in range(66):
     data1.append(
         {
             "ip":"172.18.2.%s"%(i),
@@ -70,9 +70,11 @@ data3 = [
 data4 = [
     {
         'name':'ubuntu:16.04',
+        "id":str(uuid.uuid4()),
     },
     {
         'name':'centos:7',
+        "id":str(uuid.uuid4()),
     },
 ]
 
@@ -219,6 +221,21 @@ def aaa():
         return jsonify(
             {
                 "data":data4,
+            }
+        )
+    
+    elif method == "image_delete":
+        return jsonify(
+            {
+                "status":0,
+            }
+        )
+    
+    elif method == "image_add":
+        return jsonify(
+            {
+                "status":0,
+                "id": str(uuid.uuid4()),
             }
         )
     
