@@ -21,6 +21,7 @@ route_api = {
 
     'container_info': apis.get_containers_info,
     'container_delete': apis.container_delete,
+    'container_add' : apis.container_add,
 
     'test':apis.test,
 }
