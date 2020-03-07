@@ -51,7 +51,7 @@ def get_containers_info(request):
 
 
 def container_delete(request):
-    get_id = request.json.get("id")
+    get_id = request.json.get("container_id")
     get_server_ip = request.json.get("server_ip")
 
     data = {
@@ -62,11 +62,12 @@ def container_delete(request):
     }
     get_return = requests.post('http://%s/server/api' %
                                (get_server_ip), json=data)
-
+    return2data = json.loads(get_return.text)
     return jsonify(
         {
             'status': 0,
             'id': get_id,
+            'data': return2data,
         }
     )
 
@@ -92,7 +93,7 @@ def container_add(request):
     #名字
     get_name = request.json.get("name")
     if get_name:
-        data["data"]["name"] = get_name
+        data['url'] = "%s?name=%s"%(data['url'],get_name)
 
     #端口映射
     get_connect_port = request.json.get("connect_port")
@@ -144,8 +145,34 @@ def container_add(request):
 
     get_return = requests.post('http://%s/server/api' %
                                (get_server_ip), json=data)
-    import pdb; pdb.set_trace()
+    return2data = json.loads(get_return.text)
+    return jsonify(
+        {
+            'status':0,
+            'data': return2data,
+        }
+    )
 
+def container_inpect(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+
+    data = {
+        'api': 'docker_socks',
+        'psw': 'tttest',
+        'method': "GET",
+        'url': '/containers/%s/json'%(get_container_id)
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status':0,
+            'data':return2json
+        }
+    )
 
 def server_network_info(request):
     get_server_ip = request.json.get("server_ip")
@@ -161,23 +188,10 @@ def server_network_info(request):
 
     return2json = json.loads(get_return.text)
 
-    return_data = list()
-    for i in return2json['data']:
-        try:
-            temp_ip = ".".join(i.get("IPAM").get("Config")[0].get("Gateway").split('.')[:3])+"."
-        except:
-            temp_ip = "none"
-        one_data = {
-            'id': i.get('Id'),
-            'name': i.get('Name'),
-            'ip': temp_ip,
-        }
-        return_data.append(one_data)
-
     return jsonify(
         {
             'status': 0,
-            "data": return_data
+            "data": return2json
         }
     )
 
