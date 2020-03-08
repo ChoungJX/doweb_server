@@ -50,8 +50,8 @@ route_api = {
     'volume_delete': apis.volume_delete,  # 删除某个卷
     'volume_delete_unused': apis.volume_delete_unused,  # 删除未使用的卷
 
-    'system_infomation': "",  # 获取系统信息
-    'system_version': "",  # 获取系统版本信息
+    'system_infomation': apis.system_infomation,  # 获取系统信息
+    'system_version': apis.system_version,  # 获取系统版本信息
 
 
     'test': apis.test,

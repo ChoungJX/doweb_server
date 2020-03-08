@@ -700,6 +700,7 @@ def volume_inspcet(request):
         }
     )
 
+
 def volume_delete(request):
     get_server_ip = request.json.get('server_ip')
     get_volume_id = request.json.get('volume_id')
@@ -721,6 +722,7 @@ def volume_delete(request):
         }
     )
 
+
 def volume_delete_unused(request):
     get_server_ip = request.json.get('server_ip')
 
@@ -740,6 +742,49 @@ def volume_delete_unused(request):
             'data': return2json,
         }
     )
+
+
+def system_infomation(request):
+    get_server_ip = request.json.get('server_ip')
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/info',
+        'method': 'GET',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
+
+
+def system_version(request):
+    get_server_ip = request.json.get('server_ip')
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/version',
+        'method': 'GET',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
+
 
 def test(requests):
     aaa = requests.json
