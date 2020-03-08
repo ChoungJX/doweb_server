@@ -1,6 +1,6 @@
 from app import app
 from app import views
-#from app import models
+from app import models
 
 
 
