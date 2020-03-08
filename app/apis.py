@@ -357,6 +357,150 @@ def container_delete_stoped(request):
     )
 
 
+def image_info(request):
+    get_server_ip = request.json.get("server_ip")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/images/json',
+        'method': "GET",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def image_delete_cache(request):
+    get_server_ip = request.json.get("server_ip")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/build/prune",
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def image_pull(request):
+    get_server_ip = request.json.get("server_ip")
+    get_image_name = request.json.get("image_name")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/build?pull=%s" % (get_image_name),
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def image_inspect(request):
+    get_server_ip = request.json.get("server_ip")
+    get_image_id = request.json.get("image_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/images/%s/json" % (get_image_id),
+        'method': "GET",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def image_delele(request):
+    get_server_ip = request.json.get("server_ip")
+    get_image_id = request.json.get("image_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/images/%s?force=true" % (get_image_id),
+        'method': "DELETE",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def image_create_from_container(request):
+    send_url = "/commit"
+    # ======接收参数参数========
+    get_server_ip = request.json.get("server_ip")
+
+    get_container_id = request.json.get("container_id")
+    send_url = "%s?container=%s" % (send_url, get_container_id)
+
+    get_image_name = request.json.get("image_name")
+    send_url = "%s&repo=%s" % (send_url, get_image_name)
+    # ========================
+
+    data = {
+        'api': 'docker_socks',
+        'url': send_url,
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
 def test(requests):
     aaa = requests.json
     import pdb

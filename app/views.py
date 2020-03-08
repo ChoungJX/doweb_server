@@ -30,13 +30,13 @@ route_api = {
     'container_rename': apis.container_rename,  # 容器更名
     'container_delete_stoped': apis.container_delete_stoped,  # 删除已停止的容器
 
-    'image_info': "",  # 服务器的所有镜像信息
-    'image_delete_cache': "",  # 服务器镜像缓存删除
-    'image_pull': "",  # 从dockerhub拉取一个镜像
-    'image_inspect': "",  # 获取一个镜像的详细信息
-    'image_delele': "",  # 删除一个镜像
+    'image_info': apis.image_info,  # 服务器的所有镜像信息
+    'image_delete_cache': apis.image_delete_cache,  # 服务器镜像缓存删除
+    'image_pull': apis.image_pull,  # 从dockerhub拉取一个镜像
+    'image_inspect': apis.image_inspect,  # 获取一个镜像的详细信息
+    'image_delele': apis.image_delele,  # 删除一个镜像
     'image_search:': '',  # 从dockerhub搜索镜像
-    'image_create_from_container': "",  # 将某个容器打包为镜像
+    'image_create_from_container': apis.image_create_from_container,  # 将某个容器打包为镜像
 
     'network_info': apis.server_network_info,  # 服务器docker的网卡信息
     'network_inspect': "",  # 查看某个网卡的关键信息
