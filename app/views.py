@@ -45,10 +45,10 @@ route_api = {
     'network_connect_container': apis.network_connect_container,  # 为容器添加新网卡
     'network_disconnect_container': apis.network_disconnect_container,  # 移除某个容器的网卡
 
-    'volume_info': "",  # 查看服务器所有卷信息
-    'volume_inspcet': "",  # 查看某个卷的详细信息
-    'volume_delete': "",  # 删除某个卷
-    'volume_delete_unused': "",  # 删除未使用的卷
+    'volume_info': apis.volume_info,  # 查看服务器所有卷信息
+    'volume_inspcet': apis.volume_inspcet,  # 查看某个卷的详细信息
+    'volume_delete': apis.volume_delete,  # 删除某个卷
+    'volume_delete_unused': apis.volume_delete_unused,  # 删除未使用的卷
 
     'system_infomation': "",  # 获取系统信息
     'system_version': "",  # 获取系统版本信息

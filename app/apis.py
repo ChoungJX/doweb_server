@@ -658,6 +658,89 @@ def network_disconnect_container(request):
     )
 
 
+def volume_info(request):
+    get_server_ip = request.json.get('server_ip')
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/volumes',
+        'method': 'GET',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
+
+
+def volume_inspcet(request):
+    get_server_ip = request.json.get('server_ip')
+    get_volume_id = request.json.get('volume_id')
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/volumes/%s' % (get_volume_id),
+        'method': 'GET',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
+
+def volume_delete(request):
+    get_server_ip = request.json.get('server_ip')
+    get_volume_id = request.json.get('volume_id')
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/volumes/%s' % (get_volume_id),
+        'method': 'DELETE',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
+
+def volume_delete_unused(request):
+    get_server_ip = request.json.get('server_ip')
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/volumes/prune',
+        'method': 'POST',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
+
 def test(requests):
     aaa = requests.json
     import pdb
