@@ -26,11 +26,11 @@ class Server(db.Model):
     server_ip = db.Column(db.String(30))
     server_type = db.Column(db.String(30))
 
-    def __init__(self, get_id, username, password, stype):
+    def __init__(self, get_id, server_ip, server_name, server_type):
         self.id = get_id
-        self.username = username
-        self.password = password
-        this.server_type = stype
+        self.server_name = server_name
+        self.server_ip = server_ip
+        self.server_type = server_type
 
     def __repr__(self):
         return '<User %s>' % self.id

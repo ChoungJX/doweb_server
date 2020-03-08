@@ -3,8 +3,9 @@ import json
 from flask import jsonify
 import requests
 
-from app import app
-from .Lib import uuid_generator
+
+from app.Lib import uuid_generator
+import app.sql
 
 
 def check_status(data_dict):
@@ -788,5 +789,6 @@ def system_version(request):
 
 def test(requests):
     aaa = requests.json
+    
     import pdb
     pdb.set_trace()
