@@ -17,6 +17,9 @@ def api():
 
 route_api = {
     "server_info": apis.get_server_info,  # 服务器集群信息
+    "server_add": apis.server_add,
+    "server_delete": apis.server_delete,
+    "server_change_name": apis.server_change_name,
 
     'container_info': apis.get_containers_info,  # 服务器的所有容器信息
     'container_delete': apis.container_delete,  # 删除某一个容器

@@ -4,13 +4,15 @@ from app.Lib import uuid_generator
 import flask_login
 
 
-def login_as_user(username,password):
+def login_as_user(username, password):
     get_user = User.query.filter_by(username).first()
     if get_user:
         if get_user.password == password:
-            return False
+            flask_login.login_user(get_user)
+            return True
 
     return False
+
 
 def create_user(username, password, ifAdmin):
     if ifAdmin:
@@ -73,3 +75,18 @@ def remove_server(s_uuid):
     get_server = Server.query.filter_by(id=s_uuid).first()
     db.session.delete(get_server)
     db.session.commit()
+
+
+def get_server_all():
+    get_servers = Server.query.all()
+
+    return_list = list()
+    for i in get_servers:
+        one_data = {
+            'id': i.id,
+            'server_ip': i.server_ip,
+            'server_name': i.server_name
+        }
+        return_list.append(one_data)
+    
+    return return_list

@@ -8,25 +8,66 @@ from app.Lib import uuid_generator
 import app.sql
 
 
-def check_status(data_dict):
-    if data_dict.get("status") == 0:
-        return True
+def login(request):
+    get_username = request.json.get("username")
+    get_password = request.json.get("password")
+
+    if app.sql.login_as_user(get_username, get_password):
+        return jsonify(
+            {
+                'status': 0
+            }
+        )
     else:
-        return False
+        return jsonify(
+            {
+                'status': -1
+            }
+        )
 
 
 def get_server_info(request):
-    data = [
-        {
-            'id': uuid_generator.create_new_uuid(),
-            'name': 'hk',
-            'ip': '127.0.0.1'
-        }
-    ]
+    data = app.sql.get_server_all()
 
     return jsonify(
         {
             "data": data,
+        }
+    )
+
+
+def server_add(request):
+    get_server_ip = request.json.get('server_ip')
+    get_server_name = request.json.get('server_name')
+    get_server_type = request.json.get('server_type')
+    app.sql.create_server(get_server_ip, get_server_name, get_server_type)
+
+    return jsonify(
+        {
+            'status': 0,
+        }
+    )
+
+
+def server_delete(request):
+    get_server_id = request.json.get('server_id')
+    app.sql.remove_server(get_server_id)
+
+    return jsonify(
+        {
+            'status': 0,
+        }
+    )
+
+
+def server_change_name(request):
+    get_server_id = request.json.get('server_id')
+    get_server_name = request.json.get('server_name')
+    app.sql.change_server_name(get_server_id, get_server_name)
+
+    return jsonify(
+        {
+            'status': 0,
         }
     )
 
@@ -789,6 +830,6 @@ def system_version(request):
 
 def test(requests):
     aaa = requests.json
-    
+
     import pdb
     pdb.set_trace()
