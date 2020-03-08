@@ -74,65 +74,63 @@ def container_delete(request):
 
 def container_add(request):
     data = {
-        'api':"docker_socks",
-        'url':"/containers/create",
+        'api': "docker_socks",
+        'url': "/containers/create",
         "method": 'POST',
-        'psw':"tttest",
-        'data':dict(),
+        'psw': "tttest",
+        'data': dict(),
     }
-    #===========get args============
-    #选择的服务器
+    # ===========get args============
+    # 选择的服务器
     get_server_ip = request.json.get("server_ip")
 
-    
-    #镜像
+    # 镜像
     get_image = request.json.get("image")
     if get_image:
         data["data"]["Image"] = get_image
-    
-    #名字
+
+    # 名字
     get_name = request.json.get("name")
     if get_name:
-        data['url'] = "%s?name=%s"%(data['url'],get_name)
+        data['url'] = "%s?name=%s" % (data['url'], get_name)
 
-    #端口映射
+    # 端口映射
     get_connect_port = request.json.get("connect_port")
     if get_connect_port:
         data["data"]["PortBindings"] = get_connect_port
-    
 
-        #========以下为高级设置=======
-    #启动命令
+        # ========以下为高级设置=======
+    # 启动命令
     get_cmd = request.json.get("cmd")
     if get_cmd:
         data["data"]["Cmd"] = get_cmd
-    
-    #入口命令(代替Dockerfile)
+
+    # 入口命令(代替Dockerfile)
     get_entrypoint = request.json.get("entrypoint")
     if get_entrypoint:
         data["data"]["Entrypoint"] = get_entrypoint
-    
-    #运行使用的用户
+
+    # 运行使用的用户
     get_user = request.json.get("user")
     if get_user:
         data["data"]['User'] = get_user
-    
-    #模拟终端
+
+    # 模拟终端
     get_tty = request.json.get("Tty")
     if get_tty:
         data["data"]["Tty"] = get_tty
-    
-    #交互模式
+
+    # 交互模式
     get_interactive = request.json.get("interactive")
     if get_interactive:
         data["data"]["OpenStdin"] = get_interactive
-    
-    #工作目录
+
+    # 工作目录
     get_workdir = request.json.get("workdir")
     if get_workdir:
         data["data"]["WorkingDir"] = get_workdir
-    
-    #网络配置
+
+    # 网络配置
     get_network_model = request.json.get("network_model")
     if get_network_model:
         data["data"]["NetworkMode"] = get_network_model
@@ -140,18 +138,19 @@ def container_add(request):
     else:
         data["data"]["NetworkMode"] = "bridge"
 
-        #===========================
-    #===============================
+        # ===========================
+    # ===============================
 
     get_return = requests.post('http://%s/server/api' %
                                (get_server_ip), json=data)
     return2data = json.loads(get_return.text)
     return jsonify(
         {
-            'status':0,
+            'status': 0,
             'data': return2data,
         }
     )
+
 
 def container_inpect(request):
     get_server_ip = request.json.get("server_ip")
@@ -161,7 +160,7 @@ def container_inpect(request):
         'api': 'docker_socks',
         'psw': 'tttest',
         'method': "GET",
-        'url': '/containers/%s/json'%(get_container_id)
+        'url': '/containers/%s/json' % (get_container_id)
     }
     get_return = requests.post('http://%s/server/api' %
                                (get_server_ip), json=data)
@@ -169,10 +168,11 @@ def container_inpect(request):
 
     return jsonify(
         {
-            'status':0,
-            'data':return2json
+            'status': 0,
+            'data': return2json
         }
     )
+
 
 def server_network_info(request):
     get_server_ip = request.json.get("server_ip")
@@ -192,6 +192,167 @@ def server_network_info(request):
         {
             'status': 0,
             "data": return2json
+        }
+    )
+
+
+def container_process(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/%s/top' % (get_container_id),
+        'method': "GET",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def container_log(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/%s/logs' % (get_container_id),
+        'method': "GET",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def container_start(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/%s/start' % (get_container_id),
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def container_restart(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/%s/restart' % (get_container_id),
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def container_stop(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/%s/stop' % (get_container_id),
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def container_rename(request):
+    get_server_ip = request.json.get("server_ip")
+    get_container_id = request.json.get("container_id")
+    get_container_name = request.json.get("container_name")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/%s/rename?name=%s' % (get_container_id, get_container_name),
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def container_delete_stoped(request):
+    get_server_ip = request.json.get("server_ip")
+
+    data = {
+        'api': 'docker_socks',
+        'url': '/containers/prune',
+        'method': "POST",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
         }
     )
 

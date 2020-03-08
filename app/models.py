@@ -16,3 +16,19 @@ class User(UserMixin,db.Model):
 
     def __repr__(self):
         return '<User %s>' % self.id
+
+class Server(db.Model):
+    __tablename__ = 'servers'
+    id = db.Column(db.String(40), primary_key=True)
+    server_name = db.Column(db.String(30))
+    server_ip = db.Column(db.String(30))
+    server_type = db.Column(db.String(30))
+
+    def __init__(self, get_id, username, password, stype):
+        self.id = get_id
+        self.username = username
+        self.password = password
+        this.server_type = stype
+
+    def __repr__(self):
+        return '<User %s>' % self.id
