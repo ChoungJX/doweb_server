@@ -501,6 +501,163 @@ def image_create_from_container(request):
     )
 
 
+def network_inspect(request):
+    get_server_ip = request.json.get("server_ip")
+    get_network_id = request.json.get("network_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/networks/%s" % (get_network_id),
+        'method': "GET",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def network_delete(request):
+    get_server_ip = request.json.get("server_ip")
+    get_network_id = request.json.get("network_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/networks/%s" % (get_network_id),
+        'method': "DELETE",
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def network_create(request):
+    data = {
+        'api': 'docker_socks',
+        'url': "/networks/create",
+        'method': "POST",
+        'psw': 'tttest',
+        'data': dict()
+    }
+
+    # ========获取参数=============
+    get_server_ip = request.json.get("server_ip")
+    data["data"]["EnableIPv6"] = False
+
+    # 名字
+    get_network_name = request.json.get("network_name")
+    data["data"]["Name"] = get_network_name
+
+    # 网卡类型
+    get_network_drive = request.json.get("network_drive")
+    data["data"]["Driver"] = get_network_drive
+
+    # 网络配置
+    if get_network_drive != "none":
+        data["data"]["IPAM"] = {"Config": list()}
+        ipv4_config = {
+            "Subnet": request.json.get("subnet"),
+            "IPRange": request.json.get("ip_range"),
+            "Gateway": request.json.get("gateway"),
+        }
+        data["data"]["IPAM"]["Config"].append(ipv4_config)
+    # ===========================
+
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def network_connect_container(request):
+    get_server_ip = request.json.get("server_ip")
+    get_network_id = request.json.get("network_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/networks/%s/connect" % (get_network_id),
+        'method': "POST",
+        'psw': 'tttest',
+        'data': dict()
+    }
+    # ========获取参数=============
+    # 容器id
+    get_container_id = request.json.get("container_id")
+    data["data"]["Container"] = get_container_id
+
+    data["data"]["EndpointConfig"] = {
+        "IPAMConfig": {
+            "IPv4Address": request.json.get("network_ip")
+        }
+    }
+    # ============================
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
+def network_disconnect_container(request):
+    get_server_ip = request.json.get("server_ip")
+    get_network_id = request.json.get("network_id")
+
+    data = {
+        'api': 'docker_socks',
+        'url': "/networks/%s/disconnect" % (get_network_id),
+        'method': "POST",
+        'psw': 'tttest',
+        'data': dict()
+    }
+    # ========获取参数=============
+    # 容器id
+    get_container_id = request.json.get("container_id")
+    data["data"]["Container"] = get_container_id
+
+    data["data"]["Force"] = True
+    # ============================
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': 0,
+            'data': return2json,
+        }
+    )
+
+
 def test(requests):
     aaa = requests.json
     import pdb

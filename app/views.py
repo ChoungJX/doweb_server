@@ -39,11 +39,11 @@ route_api = {
     'image_create_from_container': apis.image_create_from_container,  # 将某个容器打包为镜像
 
     'network_info': apis.server_network_info,  # 服务器docker的网卡信息
-    'network_inspect': "",  # 查看某个网卡的关键信息
-    "network_delete": "",  # 删除某个网卡
-    'network_create': "",  # 创建新网卡
-    'network_connect_container': "",  # 为容器添加新网卡
-    'network_disconnect_container': "",  # 移除某个容器的网卡
+    'network_inspect': apis.network_inspect,  # 查看某个网卡的关键信息
+    "network_delete": apis.network_delete,  # 删除某个网卡
+    'network_create': apis.network_create,  # 创建新网卡
+    'network_connect_container': apis.network_connect_container,  # 为容器添加新网卡
+    'network_disconnect_container': apis.network_disconnect_container,  # 移除某个容器的网卡
 
     'volume_info': "",  # 查看服务器所有卷信息
     'volume_inspcet': "",  # 查看某个卷的详细信息
