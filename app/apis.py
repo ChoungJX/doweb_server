@@ -449,7 +449,7 @@ def image_pull(request):
 
     data = {
         'api': 'docker_socks',
-        'url': "/build?pull=%s" % (get_image_name),
+        'url': "/images/create?fromImage=%s" % (get_image_name),
         'method': "POST",
         'psw': 'tttest',
     }
