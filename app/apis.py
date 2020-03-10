@@ -139,7 +139,9 @@ def container_add(request):
     # 端口映射
     get_connect_port = request.json.get("connect_port")
     if get_connect_port:
-        data["data"]["PortBindings"] = get_connect_port
+        data["data"]["HostConfig"] = {
+            "PortBindings": get_connect_port
+        }
 
         # ========以下为高级设置=======
     # 启动命令
@@ -175,10 +177,10 @@ def container_add(request):
     # 网络配置
     get_network_model = request.json.get("network_model")
     if get_network_model:
-        data["data"]["NetworkMode"] = get_network_model
-        data["data"]["EndpointsConfig"] = request.json.get("network_config")
-    else:
-        data["data"]["NetworkMode"] = "bridge"
+        data["data"]["NetworkingConfig"] = {
+            "EndpointsConfig":get_network_model
+        }
+        
 
         # ===========================
     # ===============================
