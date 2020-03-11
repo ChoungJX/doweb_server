@@ -138,11 +138,12 @@ def container_add(request):
 
     # 端口映射
     get_connect_port = request.json.get("connect_port")
+    get_export_port = request.json.get("export_port")
     if get_connect_port:
         data["data"]["HostConfig"] = {
             "PortBindings": get_connect_port
         }
-
+        data["data"]["ExposedPorts"] = get_export_port
         # ========以下为高级设置=======
     # 启动命令
     get_cmd = request.json.get("cmd")
