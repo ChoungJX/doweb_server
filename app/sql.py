@@ -5,7 +5,7 @@ import flask_login
 
 
 def login_as_user(username, password):
-    get_user = User.query.filter_by(username).first()
+    get_user = User.query.filter_by(username=username).first()
     if get_user:
         if get_user.password == password:
             flask_login.login_user(get_user)

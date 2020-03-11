@@ -26,12 +26,38 @@ def login(request):
         )
 
 
+def check_login(request):
+    return jsonify(
+        {
+            "isLogin": True
+        }
+    )
+
+
 def get_server_info(request):
     data = app.sql.get_server_all()
 
     return jsonify(
         {
             "data": data,
+        }
+    )
+
+
+def server_check(request):
+    get_server_ip = request.json.get('server_ip')
+
+    data = {
+        'api': 'check_status',
+        'psw': 'tttest',
+    }
+    get_return = requests.post('http://%s/server/api' %
+                               (get_server_ip), json=data)
+    return2json = json.loads(get_return.text)
+
+    return jsonify(
+        {
+            'status': return2json.get("status")
         }
     )
 
@@ -179,9 +205,8 @@ def container_add(request):
     get_network_model = request.json.get("network_model")
     if get_network_model:
         data["data"]["NetworkingConfig"] = {
-            "EndpointsConfig":get_network_model
+            "EndpointsConfig": get_network_model
         }
-        
 
         # ===========================
     # ===============================

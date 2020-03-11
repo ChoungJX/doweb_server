@@ -2,7 +2,7 @@ from app import app
 from flask import url_for, request, redirect, render_template, jsonify, current_app, make_response
 
 
-from . import apis
+from app import apis
 
 
 @app.route('/api', methods=['POST'])
@@ -17,6 +17,7 @@ def api():
 
 route_api = {
     "server_info": apis.get_server_info,  # 服务器集群信息
+    "server_check": apis.server_check,
     "server_add": apis.server_add,
     "server_delete": apis.server_delete,
     "server_change_name": apis.server_change_name,
@@ -55,6 +56,9 @@ route_api = {
 
     'system_infomation': apis.system_infomation,  # 获取系统信息
     'system_version': apis.system_version,  # 获取系统版本信息
+
+    'login': apis.login,
+    "check_login":apis.check_login,
 
 
     'test': apis.test,
