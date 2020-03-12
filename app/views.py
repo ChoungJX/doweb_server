@@ -1,6 +1,6 @@
 from app import app
 from flask import url_for, request, redirect, render_template, jsonify, current_app, make_response
-
+import flask_login
 
 from app import apis
 
@@ -9,11 +9,20 @@ from app import apis
 def api():
     print(request.json)
     if request.json.get('api'):
-        callback = route_api.get(request.json.get('api'))
-        return callback(request)
+        if flask_login.current_user.is_authenticated:
+            callback = route_api.get(request.json.get('api'))
+            return callback(request)
+        else:
+            callback = route_api_no_require_login.get(request.json.get('api'))
+            return callback(request)
 
     return jsonify({"ststus": 0, "message": "no api"})
 
+
+route_api_no_require_login = {
+    'login': apis.login,
+    "check_login": apis.check_login,
+}
 
 route_api = {
     "server_info": apis.get_server_info,  # 服务器集群信息
@@ -58,7 +67,7 @@ route_api = {
     'system_version': apis.system_version,  # 获取系统版本信息
 
     'login': apis.login,
-    "check_login":apis.check_login,
+    "check_login": apis.check_login,
 
 
     'test': apis.test,

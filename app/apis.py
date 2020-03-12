@@ -2,6 +2,7 @@ import json
 
 from flask import jsonify
 import requests
+import flask_login
 
 
 from app.Lib import uuid_generator
@@ -27,11 +28,18 @@ def login(request):
 
 
 def check_login(request):
-    return jsonify(
-        {
-            "isLogin": True
-        }
-    )
+    if flask_login.current_user.is_authenticated:
+        return jsonify(
+            {
+                "isLogin": True
+            }
+        )
+    else:
+        return jsonify(
+            {
+                "isLogin": False
+            }
+        )
 
 
 def get_server_info(request):
