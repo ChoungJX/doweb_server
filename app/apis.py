@@ -42,6 +42,10 @@ def check_login(request):
         )
 
 
+def ifUsed(request):
+    return app.sql.ifCreated()
+
+
 def get_server_info(request):
     data = app.sql.get_server_all()
 

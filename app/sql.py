@@ -93,7 +93,7 @@ def get_server_all():
 
 
 def get_server_by_server_ip(server_ip):
-    get_server = Server.query.filter_by(id=s_uuid).first()
+    get_server = Server.query.filter_by(server_ip=server_ip).first()
     return get_server
 
 

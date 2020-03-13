@@ -1,8 +1,15 @@
-from app import app
+from app import app,sql
 from flask import url_for, request, redirect, render_template, jsonify, current_app, make_response
 import flask_login
 
 from app import apis
+
+
+@app.route('/welcome_api', methods=['POST'])
+def welcome():
+    pass
+
+
 
 
 @app.route('/api', methods=['POST'])
@@ -22,6 +29,7 @@ def api():
 route_api_no_require_login = {
     'login': apis.login,
     "check_login": apis.check_login,
+    'ifUsed': apis.ifUsed,
 }
 
 route_api = {
