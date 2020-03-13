@@ -1,4 +1,4 @@
-from app import app,sql
+from app import app, sql
 from flask import url_for, request, redirect, render_template, jsonify, current_app, make_response
 import flask_login
 
@@ -7,9 +7,26 @@ from app import apis
 
 @app.route('/welcome_api', methods=['POST'])
 def welcome():
-    pass
+    if sql.ifCreated():
+        return jsonify({
+            "status": -1,
+            'message': "this server has binded!"
+        })
+    else:
+        if request.json.get('api'):
+            callback = welcome_route_api.get(request.json.get('api'))
+            return callback(request)
+        else:
+            return jsonify({
+                "status": -1,
+                'message': "no api!"
+            })
 
 
+welcome_route_api = {
+    'create_user': apis.welcome_create_user,
+    'create_server': apis.server_add,
+}
 
 
 @app.route('/api', methods=['POST'])
@@ -76,6 +93,7 @@ route_api = {
 
     'login': apis.login,
     "check_login": apis.check_login,
+    'ifUsed': apis.ifUsed,
 
 
     'test': apis.test,

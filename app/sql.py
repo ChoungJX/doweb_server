@@ -15,6 +15,10 @@ def login_as_user(username, password):
 
 
 def create_user(username, password, ifAdmin):
+    get_user = User.query.filter_by(username=username).first()
+    if get_user:
+        return False
+
     if ifAdmin:
         new_user = User(
             uuid_generator.create_new_uuid(),
@@ -29,14 +33,16 @@ def create_user(username, password, ifAdmin):
             password,
             "0"
         )
-
+    flask_login.login_user(new_user)
     db.session.add(new_user)
     db.session.commit()
+    return True
 
 
 def ifCreated():
     hasUser = User.query.first()
-    if hasUser:
+    hasServer = Server.query.first()
+    if hasUser and hasServer:
         return True
     else:
         return False
@@ -54,12 +60,14 @@ def change_password(u_uuid, password):
     db.session.commit()
 
 
-def create_server(server_ip, server_name, server_type):
+def create_server(server_ip, server_name, server_type, server_user, server_psw):
     new_server = Server(
         uuid_generator.create_new_uuid(),
         server_ip,
         server_name,
-        server_type
+        server_type,
+        server_user,
+        server_psw
     )
     db.session.add(new_server)
     db.session.commit()
@@ -94,6 +102,10 @@ def get_server_all():
 
 def get_server_by_server_ip(server_ip):
     get_server = Server.query.filter_by(server_ip=server_ip).first()
+    return get_server
+
+def get_server_by_id(server_id):
+    get_server = Server.query.filter_by(id=server_id).first()
     return get_server
 
 

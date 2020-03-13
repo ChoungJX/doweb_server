@@ -43,7 +43,14 @@ def check_login(request):
 
 
 def ifUsed(request):
-    return app.sql.ifCreated()
+    if app.sql.ifCreated():
+        return jsonify({
+            "status": 1
+        })
+    else:
+        return jsonify({
+            "status": 0
+        })
 
 
 def get_server_info(request):
@@ -79,24 +86,51 @@ def server_add(request):
     get_server_ip = request.json.get('server_ip')
     get_server_name = request.json.get('server_name')
     get_server_type = request.json.get('server_type')
-    app.sql.create_server(get_server_ip, get_server_name, get_server_type)
+    get_server_user = request.json.get('server_user')
+    get_server_psw = request.json.get('server_psw')
 
-    return jsonify(
-        {
-            'status': 0,
-        }
-    )
+    return2json = send_request.send_request_server_bind(
+        get_server_type, get_server_ip, {})
+
+    if return2json.get("status") == 0:
+
+        app.sql.create_server(get_server_ip, get_server_name,
+                              get_server_type, get_server_user, get_server_psw)
+
+        return jsonify(
+            {
+                'status': 0,
+            }
+        )
+    else:
+        return jsonify(
+            {
+                'status': -1,
+                'message': return2json.get("message")
+            }
+        )
 
 
 def server_delete(request):
     get_server_id = request.json.get('server_id')
-    app.sql.remove_server(get_server_id)
+    get_s = app.sql.get_server_by_id(get_server_id)
+    return2json = send_request.send_request_server_delete(
+        get_s.server_type, get_s.server_ip, {})
 
-    return jsonify(
-        {
-            'status': 0,
-        }
-    )
+    if return2json.get("status") == 0:
+        app.sql.remove_server(get_server_id)
+        return jsonify(
+            {
+                'status': 0,
+            }
+        )
+    else:
+        return jsonify(
+            {
+                'status': -1,
+                'message': return2json.get("message")
+            }
+        )
 
 
 def server_change_name(request):
@@ -875,6 +909,22 @@ def system_version(request):
             'data': return2json,
         }
     )
+
+
+def welcome_create_user(request):
+    get_username = request.json.get("username")
+    get_password = request.json.get("password")
+
+    app.sql.create_certification()
+
+    if app.sql.create_user(get_username, get_password, True):
+        return jsonify({
+            'status': 0
+        })
+    else:
+        return jsonify({
+            'status': -1
+        })
 
 
 def test(requests):
