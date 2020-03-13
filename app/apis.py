@@ -1,11 +1,11 @@
 import json
 
 from flask import jsonify
-import requests
+
 import flask_login
 
 
-from app.Lib import uuid_generator
+from app.Lib import uuid_generator, send_request
 import app.sql
 
 
@@ -54,14 +54,15 @@ def get_server_info(request):
 
 def server_check(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'check_status',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -108,15 +109,16 @@ def server_change_name(request):
 
 def get_containers_info(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     data = {
         'api': 'docker_socks',
         'url': '/containers/json?all=true',
         'method': 'GET',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -129,6 +131,8 @@ def get_containers_info(request):
 def container_delete(request):
     get_id = request.json.get("container_id")
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -136,9 +140,9 @@ def container_delete(request):
         'method': "DELETE",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2data = json.loads(get_return.text)
+
+    return2data = send_request.send_request(
+        get_server_type, get_server_ip, data)
     return jsonify(
         {
             'status': 0,
@@ -159,6 +163,8 @@ def container_add(request):
     # ===========get args============
     # 选择的服务器
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     # 镜像
     get_image = request.json.get("image")
@@ -219,13 +225,12 @@ def container_add(request):
         # ===========================
     # ===============================
 
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2data = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
     return jsonify(
         {
             'status': 0,
-            'data': return2data,
+            'data': return2json,
         }
     )
 
@@ -233,6 +238,8 @@ def container_add(request):
 def container_inpect(request):
     get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -240,9 +247,8 @@ def container_inpect(request):
         'method': "GET",
         'url': '/containers/%s/json' % (get_container_id)
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -254,6 +260,8 @@ def container_inpect(request):
 
 def server_network_info(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -261,10 +269,8 @@ def server_network_info(request):
         'method': "GET",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -277,6 +283,8 @@ def server_network_info(request):
 def container_process(request):
     get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -284,10 +292,8 @@ def container_process(request):
         'method': "GET",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -299,6 +305,8 @@ def container_process(request):
 
 def container_log(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_container_id = request.json.get("container_id")
 
     data = {
@@ -307,10 +315,8 @@ def container_log(request):
         'method': "GET",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -323,6 +329,8 @@ def container_log(request):
 def container_start(request):
     get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -330,11 +338,8 @@ def container_start(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
-
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
     return jsonify(
         {
             'status': 0,
@@ -346,6 +351,8 @@ def container_start(request):
 def container_restart(request):
     get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -353,11 +360,8 @@ def container_restart(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
-
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
     return jsonify(
         {
             'status': 0,
@@ -369,6 +373,8 @@ def container_restart(request):
 def container_stop(request):
     get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -376,10 +382,8 @@ def container_stop(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -391,6 +395,8 @@ def container_stop(request):
 
 def container_rename(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_container_id = request.json.get("container_id")
     get_container_name = request.json.get("container_name")
 
@@ -400,10 +406,8 @@ def container_rename(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -415,6 +419,8 @@ def container_rename(request):
 
 def container_delete_stoped(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -422,10 +428,8 @@ def container_delete_stoped(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -437,6 +441,8 @@ def container_delete_stoped(request):
 
 def image_info(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -444,10 +450,8 @@ def image_info(request):
         'method': "GET",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -459,6 +463,8 @@ def image_info(request):
 
 def image_delete_cache(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -466,10 +472,8 @@ def image_delete_cache(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -481,6 +485,8 @@ def image_delete_cache(request):
 
 def image_pull(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_image_name = request.json.get("image_name")
 
     data = {
@@ -489,10 +495,8 @@ def image_pull(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -504,6 +508,8 @@ def image_pull(request):
 
 def image_inspect(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_image_id = request.json.get("image_id")
 
     data = {
@@ -512,10 +518,8 @@ def image_inspect(request):
         'method': "GET",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -527,6 +531,8 @@ def image_inspect(request):
 
 def image_delele(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_image_id = request.json.get("image_id")
 
     data = {
@@ -535,10 +541,8 @@ def image_delele(request):
         'method': "DELETE",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -552,6 +556,8 @@ def image_create_from_container(request):
     send_url = "/commit"
     # ======接收参数参数========
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     get_container_id = request.json.get("container_id")
     send_url = "%s?container=%s" % (send_url, get_container_id)
@@ -566,10 +572,8 @@ def image_create_from_container(request):
         'method': "POST",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -581,6 +585,8 @@ def image_create_from_container(request):
 
 def network_inspect(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -589,10 +595,8 @@ def network_inspect(request):
         'method': "GET",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -604,6 +608,8 @@ def network_inspect(request):
 
 def network_delete(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -612,10 +618,8 @@ def network_delete(request):
         'method': "DELETE",
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -636,6 +640,8 @@ def network_create(request):
 
     # ========获取参数=============
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     data["data"]["EnableIPv6"] = False
 
     # 名字
@@ -657,10 +663,8 @@ def network_create(request):
         data["data"]["IPAM"]["Config"].append(ipv4_config)
     # ===========================
 
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -672,6 +676,8 @@ def network_create(request):
 
 def network_connect_container(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -692,11 +698,8 @@ def network_connect_container(request):
         }
     }
     # ============================
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
-
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
     return jsonify(
         {
             'status': 0,
@@ -707,6 +710,8 @@ def network_connect_container(request):
 
 def network_disconnect_container(request):
     get_server_ip = request.json.get("server_ip")
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -723,10 +728,8 @@ def network_disconnect_container(request):
 
     data["data"]["Force"] = True
     # ============================
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -738,6 +741,8 @@ def network_disconnect_container(request):
 
 def volume_info(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -745,9 +750,8 @@ def volume_info(request):
         'method': 'GET',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -759,6 +763,8 @@ def volume_info(request):
 
 def volume_inspcet(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_volume_id = request.json.get('volume_id')
 
     data = {
@@ -767,9 +773,8 @@ def volume_inspcet(request):
         'method': 'GET',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -781,6 +786,8 @@ def volume_inspcet(request):
 
 def volume_delete(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
     get_volume_id = request.json.get('volume_id')
 
     data = {
@@ -789,9 +796,8 @@ def volume_delete(request):
         'method': 'DELETE',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -803,6 +809,8 @@ def volume_delete(request):
 
 def volume_delete_unused(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -810,9 +818,8 @@ def volume_delete_unused(request):
         'method': 'POST',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -824,6 +831,8 @@ def volume_delete_unused(request):
 
 def system_infomation(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -831,9 +840,8 @@ def system_infomation(request):
         'method': 'GET',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {
@@ -845,6 +853,8 @@ def system_infomation(request):
 
 def system_version(request):
     get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
 
     data = {
         'api': 'docker_socks',
@@ -852,9 +862,8 @@ def system_version(request):
         'method': 'GET',
         'psw': 'tttest',
     }
-    get_return = requests.post('http://%s/server/api' %
-                               (get_server_ip), json=data)
-    return2json = json.loads(get_return.text)
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
 
     return jsonify(
         {

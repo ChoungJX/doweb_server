@@ -88,8 +88,13 @@ def get_server_all():
             'server_name': i.server_name
         }
         return_list.append(one_data)
-    
+
     return return_list
+
+
+def get_server_by_server_ip(server_ip):
+    get_server = Server.query.filter_by(id=s_uuid).first()
+    return get_server
 
 
 def create_certification():
