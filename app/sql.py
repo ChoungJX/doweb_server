@@ -90,3 +90,9 @@ def get_server_all():
         return_list.append(one_data)
     
     return return_list
+
+
+def create_certification():
+    new_c = Certification(uuid_generator.create_new_uuid())
+    db.session.add(new_c)
+    db.session.commit()
