@@ -90,7 +90,8 @@ route_api = {
 
     'system_infomation': apis.system_infomation,  # 获取系统信息
     'system_version': apis.system_version,  # 获取系统版本信息
-    'check_server_status':apis.check_server_status,
+    'system_use': apis.system_use,  # 获取系统docker资源用量
+    'check_server_status': apis.check_server_status,  # 获取系统资源用量
 
     'login': apis.login,
     "check_login": apis.check_login,
