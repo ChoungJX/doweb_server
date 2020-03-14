@@ -90,6 +90,7 @@ route_api = {
 
     'system_infomation': apis.system_infomation,  # 获取系统信息
     'system_version': apis.system_version,  # 获取系统版本信息
+    'check_server_status':apis.check_server_status,
 
     'login': apis.login,
     "check_login": apis.check_login,

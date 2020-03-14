@@ -926,6 +926,24 @@ def welcome_create_user(request):
             'status': -1
         })
 
+def check_server_status(request):
+    get_server_ip = request.json.get('server_ip')
+    get_server_type = app.sql.get_server_by_server_ip(
+        get_server_ip).server_type
+
+    data = {
+        'api': 'check_server_status',
+        'psw': 'tttest',
+    }
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
+
+    return jsonify(
+        {
+            "status": 0,
+            'data': return2json,
+        }
+    )
 
 def test(requests):
     aaa = requests.json
