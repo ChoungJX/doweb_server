@@ -96,6 +96,7 @@ route_api = {
     'login': apis.login,
     "check_login": apis.check_login,
     'ifUsed': apis.ifUsed,
+    'psw_check':apis.psw_check,
 
 
     'test': apis.test,

@@ -104,6 +104,7 @@ def get_server_by_server_ip(server_ip):
     get_server = Server.query.filter_by(server_ip=server_ip).first()
     return get_server
 
+
 def get_server_by_id(server_id):
     get_server = Server.query.filter_by(id=server_id).first()
     return get_server
@@ -113,3 +114,8 @@ def create_certification():
     new_c = Certification(uuid_generator.create_new_uuid())
     db.session.add(new_c)
     db.session.commit()
+
+
+def get_certification():
+    get_c = Certification.query.first()
+    return get_c.id

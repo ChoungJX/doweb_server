@@ -926,6 +926,7 @@ def welcome_create_user(request):
             'status': -1
         })
 
+
 def check_server_status(request):
     get_server_ip = request.json.get('server_ip')
     get_server_type = app.sql.get_server_by_server_ip(
@@ -944,6 +945,7 @@ def check_server_status(request):
             'data': return2json,
         }
     )
+
 
 def system_use(request):
     get_server_ip = request.json.get("server_ip")
@@ -965,6 +967,16 @@ def system_use(request):
             'data': return2json,
         }
     )
+
+
+def psw_check(request):
+    return jsonify(
+        {
+            'id': app.sql.get_certification(),
+            'status': 0
+        }
+    )
+
 
 def test(requests):
     aaa = requests.json
