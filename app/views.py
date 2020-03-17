@@ -5,6 +5,11 @@ import flask_login
 from app import apis
 
 
+@app.route('/')
+def index():
+    return render_template("index.html")
+
+
 @app.route('/welcome_api', methods=['POST'])
 def welcome():
     if sql.ifCreated():
@@ -96,7 +101,7 @@ route_api = {
     'login': apis.login,
     "check_login": apis.check_login,
     'ifUsed': apis.ifUsed,
-    'psw_check':apis.psw_check,
+    'psw_check': apis.psw_check,
 
 
     'test': apis.test,
