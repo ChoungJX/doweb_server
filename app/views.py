@@ -103,6 +103,7 @@ route_api = {
     'ifUsed': apis.ifUsed,
     'psw_check': apis.psw_check,
 
-
-    'test': apis.test,
+    'user_info': apis.user_info,
+    'user_delete': apis.user_delete,
+    'create_user': apis.user_create,
 }

@@ -39,6 +39,45 @@ def create_user(username, password, ifAdmin):
     return True
 
 
+def create_user_nologin(username, password, ifAdmin):
+    get_user = User.query.filter_by(username=username).first()
+    if get_user:
+        return False
+
+    if ifAdmin:
+        new_user = User(
+            uuid_generator.create_new_uuid(),
+            username,
+            password,
+            "100"
+        )
+    else:
+        new_user = User(
+            uuid_generator.create_new_uuid(),
+            username,
+            password,
+            "0"
+        )
+    db.session.add(new_user)
+    db.session.commit()
+    return True
+
+
+def get_all_user():
+    get_users = User.query.all()
+    return_list = list()
+
+    for i in get_users:
+        return_list.append(
+            {
+                'id': i.id,
+                'username': i.username,
+                'ifadmin': i.root_number,
+            }
+        )
+    return return_list
+
+
 def ifCreated():
     hasUser = User.query.first()
     hasServer = Server.query.first()
@@ -50,8 +89,11 @@ def ifCreated():
 
 def remove_user(u_uuid):
     get_user = User.query.filter_by(id=u_uuid).first()
-    db.session.delete(get_user)
-    db.session.commit()
+    if get_user:
+        db.session.delete(get_user)
+        db.session.commit()
+        return 0
+    return -1
 
 
 def change_password(u_uuid, password):

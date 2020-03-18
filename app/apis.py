@@ -31,7 +31,8 @@ def check_login(request):
     if flask_login.current_user.is_authenticated:
         return jsonify(
             {
-                "isLogin": True
+                "isLogin": True,
+                "ifadmin":flask_login.current_user.root_number
             }
         )
     else:
@@ -978,8 +979,47 @@ def psw_check(request):
     )
 
 
-def test(requests):
-    aaa = requests.json
+def user_info(request):
+    return jsonify({
+        'status': 0,
+        'data': app.sql.get_all_user()
+    })
 
-    import pdb
-    pdb.set_trace()
+
+def user_delete(request):
+    c_u = flask_login.current_user.id
+    get_uid = request.json.get("user_id")
+
+    if c_u == get_uid:
+        return jsonify({
+            'status': 1
+        })
+
+    return jsonify({
+        'status': app.sql.remove_user(get_uid)
+    })
+
+
+def user_create(request):
+    get_username = request.json.get("username")
+    get_password = request.json.get("password")
+    get_admin = request.json.get("ifadmin")
+
+    if get_admin:
+        if app.sql.create_user_nologin(get_username, get_password, True):
+            return jsonify({
+                'status': 0
+            })
+        else:
+            return jsonify({
+                'status': -1
+            })
+    else:
+        if app.sql.create_user_nologin(get_username, get_password, False):
+            return jsonify({
+                'status': 0
+            })
+        else:
+            return jsonify({
+                'status': -1
+            })
