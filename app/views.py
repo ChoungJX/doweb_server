@@ -10,11 +10,46 @@ def index():
     return render_template("index.html")
 
 
+@app.route('/login')
+def login():
+    return render_template("index.html")
+
+
+@app.route('/welcome')
+def welcome_page():
+    return render_template("index.html")
+
+
+@app.route('/control/<args>')
+def control(args):
+    return render_template("index.html")
+
+
+@app.route('/control/<args>/<args2>')
+def control2(args, args2):
+    return render_template("index.html")
+
+
+@app.route('/control/<args>/<args2>/<args3>')
+def control3(args, args2, args3):
+    return render_template("index.html")
+
+
+@app.route('/user')
+def user():
+    return render_template("index.html")
+
+
+@app.route('/user/<args>')
+def user1(args):
+    return render_template("index.html")
+
+
 @app.route('/welcome_api', methods=['POST'])
 def welcome():
-    if sql.ifCreated():
+    if sql.ifCreatedUser():
         return jsonify({
-            "status": -1,
+            "status": -2,
             'message': "this server has binded!"
         })
     else:
@@ -30,7 +65,6 @@ def welcome():
 
 welcome_route_api = {
     'create_user': apis.welcome_create_user,
-    'create_server': apis.server_add,
 }
 
 
@@ -60,6 +94,7 @@ route_api = {
     "server_add": apis.server_add,
     "server_delete": apis.server_delete,
     "server_change_name": apis.server_change_name,
+    'create_server': apis.server_add,
 
     'container_info': apis.get_containers_info,  # 服务器的所有容器信息
     'container_delete': apis.container_delete,  # 删除某一个容器

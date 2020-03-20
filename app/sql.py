@@ -87,6 +87,14 @@ def ifCreated():
         return False
 
 
+def ifCreatedUser():
+    hasUser = User.query.first()
+    if hasUser:
+        return True
+    else:
+        return False
+
+
 def remove_user(u_uuid):
     get_user = User.query.filter_by(id=u_uuid).first()
     if get_user:
