@@ -1094,7 +1094,7 @@ def server_ssh_info(request):
 
     if request.json.get('base64'):
         get_server_psw = get_server_psw.encode()
-        get_server_psw = base64.b64encode(get_server_psw)
+        get_server_psw = base64.b64encode(get_server_psw).decode()
 
         return jsonify(
             {
