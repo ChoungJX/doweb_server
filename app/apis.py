@@ -1,4 +1,5 @@
 import json
+import base64
 
 from flask import jsonify
 
@@ -7,6 +8,7 @@ import flask_login
 
 from app.Lib import uuid_generator, send_request
 import app.sql
+from app.models import *
 
 
 def login(request):
@@ -72,9 +74,10 @@ def get_server_info(request):
 
 
 def server_check(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'check_status',
@@ -154,9 +157,11 @@ def server_change_name(request):
 
 
 def get_containers_info(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     data = {
         'api': 'docker_socks',
         'url': '/containers/json?all=true',
@@ -176,9 +181,10 @@ def get_containers_info(request):
 
 def container_delete(request):
     get_id = request.json.get("container_id")
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -208,9 +214,10 @@ def container_add(request):
     }
     # ===========get args============
     # 选择的服务器
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     # 镜像
     get_image = request.json.get("image")
@@ -282,10 +289,11 @@ def container_add(request):
 
 
 def container_inpect(request):
-    get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -305,9 +313,10 @@ def container_inpect(request):
 
 
 def server_network_info(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -327,10 +336,11 @@ def server_network_info(request):
 
 
 def container_process(request):
-    get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -350,9 +360,10 @@ def container_process(request):
 
 
 def container_log(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
     get_container_id = request.json.get("container_id")
 
     data = {
@@ -373,10 +384,11 @@ def container_log(request):
 
 
 def container_start(request):
-    get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -395,10 +407,11 @@ def container_start(request):
 
 
 def container_restart(request):
-    get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -417,10 +430,11 @@ def container_restart(request):
 
 
 def container_stop(request):
-    get_server_ip = request.json.get("server_ip")
     get_container_id = request.json.get("container_id")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -440,9 +454,11 @@ def container_stop(request):
 
 
 def container_rename(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_container_id = request.json.get("container_id")
     get_container_name = request.json.get("container_name")
 
@@ -464,9 +480,10 @@ def container_rename(request):
 
 
 def container_delete_stoped(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -486,9 +503,10 @@ def container_delete_stoped(request):
 
 
 def image_info(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -508,9 +526,10 @@ def image_info(request):
 
 
 def image_delete_cache(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -530,9 +549,11 @@ def image_delete_cache(request):
 
 
 def image_pull(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_image_name = request.json.get("image_name")
 
     data = {
@@ -553,9 +574,11 @@ def image_pull(request):
 
 
 def image_inspect(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_image_id = request.json.get("image_id")
 
     data = {
@@ -576,9 +599,11 @@ def image_inspect(request):
 
 
 def image_delele(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_image_id = request.json.get("image_id")
 
     data = {
@@ -601,9 +626,10 @@ def image_delele(request):
 def image_create_from_container(request):
     send_url = "/commit"
     # ======接收参数参数========
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     get_container_id = request.json.get("container_id")
     send_url = "%s?container=%s" % (send_url, get_container_id)
@@ -630,9 +656,11 @@ def image_create_from_container(request):
 
 
 def network_inspect(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -653,9 +681,11 @@ def network_inspect(request):
 
 
 def network_delete(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -685,9 +715,11 @@ def network_create(request):
     }
 
     # ========获取参数=============
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     data["data"]["EnableIPv6"] = False
 
     # 名字
@@ -701,12 +733,19 @@ def network_create(request):
     # 网络配置
     if get_network_drive != "none":
         data["data"]["IPAM"] = {"Config": list()}
-        ipv4_config = {
-            "Subnet": request.json.get("subnet"),
-            "IPRange": request.json.get("ip_range"),
-            "Gateway": request.json.get("gateway"),
-        }
+        ipv4_config = dict()
+        if request.json.get("subnet"):
+            ipv4_config["Subnet"] = request.json.get("subnet")
+        if request.json.get("ip_range"):
+            ipv4_config["IPRange"] = request.json.get("ip_range")
+        if request.json.get("gateway"):
+            ipv4_config["Gateway"] = request.json.get("gateway")
         data["data"]["IPAM"]["Config"].append(ipv4_config)
+
+    # 选项
+    if request.json.get("option"):
+        data["data"]["Options"] = request.json.get("option")
+
     # ===========================
 
     return2json = send_request.send_request(
@@ -721,9 +760,11 @@ def network_create(request):
 
 
 def network_connect_container(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -755,9 +796,11 @@ def network_connect_container(request):
 
 
 def network_disconnect_container(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_network_id = request.json.get("network_id")
 
     data = {
@@ -786,9 +829,10 @@ def network_disconnect_container(request):
 
 
 def volume_info(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -808,9 +852,11 @@ def volume_info(request):
 
 
 def volume_inspcet(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_volume_id = request.json.get('volume_id')
 
     data = {
@@ -831,9 +877,11 @@ def volume_inspcet(request):
 
 
 def volume_delete(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
     get_volume_id = request.json.get('volume_id')
 
     data = {
@@ -854,9 +902,10 @@ def volume_delete(request):
 
 
 def volume_delete_unused(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -876,9 +925,10 @@ def volume_delete_unused(request):
 
 
 def system_infomation(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -898,9 +948,10 @@ def system_infomation(request):
 
 
 def system_version(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -936,9 +987,10 @@ def welcome_create_user(request):
 
 
 def check_server_status(request):
-    get_server_ip = request.json.get('server_ip')
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'check_server_status',
@@ -956,9 +1008,10 @@ def check_server_status(request):
 
 
 def system_use(request):
-    get_server_ip = request.json.get("server_ip")
-    get_server_type = app.sql.get_server_by_server_ip(
-        get_server_ip).server_type
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
 
     data = {
         'api': 'docker_socks',
@@ -1030,3 +1083,100 @@ def user_create(request):
             return jsonify({
                 'status': -1
             })
+
+
+def server_ssh_info(request):
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_ip = get_server.server_ip
+    get_server_user = get_server.server_user
+    get_server_psw = get_server.server_psw
+
+    if request.json.get('base64'):
+        get_server_psw = get_server_psw.encode()
+        get_server_psw = base64.b64encode(get_server_psw)
+
+        return jsonify(
+            {
+                'status': 0,
+                'data': {
+                    'ip': get_server_ip,
+                    'user': get_server_user,
+                    'psw': get_server_psw,
+                }
+            }
+        )
+    else:
+        if flask_login.current_user.root_number == "100":
+            return jsonify(
+                {
+                    'status': 0,
+                    'data': {
+                        'ip': get_server_ip,
+                        'user': get_server_user,
+                        'psw': get_server_psw,
+                    }
+                }
+            )
+        else:
+            return jsonify(
+                {
+                    'status': 0,
+                    'data': {
+                        'ip': get_server_ip,
+                        'user': "暂无权限查看",
+                        'psw': "暂无权限查看",
+                    }
+                }
+            )
+
+
+def server_one_info(request):
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_ip = get_server.server_ip
+    get_server_name = get_server.server_name
+
+    return jsonify(
+        {
+            'status': 0,
+            'name': get_server_name,
+            'ip': get_server_ip
+        }
+    )
+
+
+def server_change_user(request):
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+
+    get_server_user = request.json.get("server_user")
+    get_server.server_user = get_server_user
+
+    if flask_login.current_user.root_number == "100":
+        db.session.commit()
+        return jsonify({
+            'status': 0,
+        })
+    else:
+        return jsonify({
+            'status': -1,
+        })
+
+
+def server_change_psw(request):
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+
+    get_server_psw = request.json.get("server_psw")
+    get_server.server_psw = get_server_psw
+
+    if flask_login.current_user.root_number == "100":
+        db.session.commit()
+        return jsonify({
+            'status': 0,
+        })
+    else:
+        return jsonify({
+            'status': -1,
+        })

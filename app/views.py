@@ -94,7 +94,11 @@ route_api = {
     "server_add": apis.server_add,
     "server_delete": apis.server_delete,
     "server_change_name": apis.server_change_name,
+    "server_change_user": apis.server_change_user,
+    "server_change_psw": apis.server_change_psw,
+    "server_one_info": apis.server_one_info,
     'create_server': apis.server_add,
+    "server_ssh_info": apis.server_ssh_info,
 
     'container_info': apis.get_containers_info,  # 服务器的所有容器信息
     'container_delete': apis.container_delete,  # 删除某一个容器

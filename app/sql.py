@@ -150,11 +150,6 @@ def get_server_all():
     return return_list
 
 
-def get_server_by_server_ip(server_ip):
-    get_server = Server.query.filter_by(server_ip=server_ip).first()
-    return get_server
-
-
 def get_server_by_id(server_id):
     get_server = Server.query.filter_by(id=server_id).first()
     return get_server
