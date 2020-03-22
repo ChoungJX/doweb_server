@@ -110,14 +110,15 @@ def change_password(u_uuid, password):
     db.session.commit()
 
 
-def create_server(server_ip, server_name, server_type, server_user, server_psw):
+def create_server(server_ip, server_name, server_type, server_user, server_psw, server_ssh):
     new_server = Server(
         uuid_generator.create_new_uuid(),
         server_ip,
         server_name,
         server_type,
         server_user,
-        server_psw
+        server_psw,
+        server_ssh
     )
     db.session.add(new_server)
     db.session.commit()

@@ -99,6 +99,7 @@ def server_add(request):
     get_server_type = request.json.get('server_type')
     get_server_user = request.json.get('server_user')
     get_server_psw = request.json.get('server_psw')
+    get_server_ssh = request.json.get('server_ssh_ip')
 
     return2json = send_request.send_request_server_bind(
         get_server_type, get_server_ip, {})
@@ -106,7 +107,7 @@ def server_add(request):
     if return2json.get("status") == 0:
 
         app.sql.create_server(get_server_ip, get_server_name,
-                              get_server_type, get_server_user, get_server_psw)
+                              get_server_type, get_server_user, get_server_psw, get_server_ssh)
 
         return jsonify(
             {
@@ -149,6 +150,20 @@ def server_change_name(request):
     get_server_name = request.json.get('server_name')
     app.sql.change_server_name(get_server_id, get_server_name)
 
+    return jsonify(
+        {
+            'status': 0,
+        }
+    )
+
+
+def server_change_ssh(request):
+    get_server_id = request.json.get('server_id')
+    get_server_ssh = request.json.get('server_ssh')
+    get_s = Server.query.filter_by(id=get_server_id).first()
+    get_s.server_ssh = get_server_ssh
+
+    db.session.commit()
     return jsonify(
         {
             'status': 0,
@@ -1088,7 +1103,7 @@ def user_create(request):
 def server_ssh_info(request):
     get_server_id = request.json.get('server_id')
     get_server = Server.query.filter_by(id=get_server_id).first()
-    get_server_ip = get_server.server_ip
+    get_server_ip = get_server.server_ssh
     get_server_user = get_server.server_user
     get_server_psw = get_server.server_psw
 
@@ -1180,3 +1195,56 @@ def server_change_psw(request):
         return jsonify({
             'status': -1,
         })
+
+
+def search_user_by_name(request):
+    get_input = request.json.get("input")
+
+    get_users = User.query.filter(
+        User.username.like("%" + get_input +
+                           "%") if get_input is not None else ""
+    )
+
+    return_list = list()
+    for i in get_users:
+        return_list.append(
+            {
+                "id": i.id,
+                "name": i.username
+            }
+        )
+
+    return jsonify({
+        'status': 0,
+        'data': return_list,
+    })
+
+
+def change_user(request):
+    get_id = request.json.get("id")
+    get_u = User.query.filter_by(id=get_id).first()
+
+    get_username = request.json.get("username")
+    get_password = request.json.get("password")
+    get_admin = request.json.get("ifadmin")
+
+    if get_username:
+        if User.query.filter_by(username=get_username).first():
+            return jsonify({
+                'status': -1
+            })
+        else:
+            get_u.username = get_username
+
+    if get_password:
+        get_u.password = get_password
+
+    if get_admin:
+        get_u.root_number = "100"
+    else:
+        get_u.root_number = "0"
+
+    db.session.commit()
+    return jsonify({
+        'status': 0,
+    })

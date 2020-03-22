@@ -94,6 +94,7 @@ route_api = {
     "server_add": apis.server_add,
     "server_delete": apis.server_delete,
     "server_change_name": apis.server_change_name,
+    "server_change_ssh": apis.server_change_ssh,
     "server_change_user": apis.server_change_user,
     "server_change_psw": apis.server_change_psw,
     "server_one_info": apis.server_one_info,
@@ -145,4 +146,6 @@ route_api = {
     'user_info': apis.user_info,
     'user_delete': apis.user_delete,
     'create_user': apis.user_create,
+    'search_user_by_name': apis.search_user_by_name,
+    'change_user': apis.change_user,
 }

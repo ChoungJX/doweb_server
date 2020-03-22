@@ -40,16 +40,18 @@ class Server(db.Model):
     server_name = db.Column(db.String(30))
     server_ip = db.Column(db.String(30))
     server_type = db.Column(db.String(30))
+    server_ssh = db.Column(db.String(30))
     server_user = db.Column(db.String(30))
     server_psw = db.Column(db.String(30))
 
-    def __init__(self, get_id, server_ip, server_name, server_type, server_user, server_psw):
+    def __init__(self, get_id, server_ip, server_name, server_type, server_user, server_psw, server_ssh):
         self.id = get_id
         self.server_name = server_name
         self.server_ip = server_ip
         self.server_type = server_type
         self.server_user = server_user
         self.server_psw = server_psw
+        self.server_ssh = server_ssh
 
     def __repr__(self):
         return '<Server %s>' % self.id
