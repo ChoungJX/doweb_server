@@ -34,7 +34,8 @@ def check_login(request):
         return jsonify(
             {
                 "isLogin": True,
-                "ifadmin": flask_login.current_user.root_number
+                "ifadmin": flask_login.current_user.root_number,
+                "username": flask_login.current_user.username,
             }
         )
     else:
@@ -43,6 +44,13 @@ def check_login(request):
                 "isLogin": False
             }
         )
+
+
+def logout(request):
+    flask_login.logout_user()
+    return jsonify({
+        'status': 0
+    })
 
 
 def ifUsed(request):

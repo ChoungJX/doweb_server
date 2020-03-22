@@ -139,6 +139,7 @@ route_api = {
     'check_server_status': apis.check_server_status,  # 获取系统资源用量
 
     'login': apis.login,
+    "logout": apis.logout,
     "check_login": apis.check_login,
     'ifUsed': apis.ifUsed,
     'psw_check': apis.psw_check,
