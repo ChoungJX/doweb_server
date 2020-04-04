@@ -8,7 +8,9 @@ a docker visual interface
 <center> |NGINX| <<==proxy==>> |doweb_server|&|webssh| </center>
 
 input `python run.py` to run
+
 输入 `python run.py` 运行
+
 `python run.py`を入力ください。 
 
 go to [doweb_controller](https://github.com/ChoungJX/doweb_controller)
