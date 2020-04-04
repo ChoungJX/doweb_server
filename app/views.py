@@ -45,6 +45,19 @@ def user1(args):
     return render_template("index.html")
 
 
+@app.route('/about')
+def about():
+    return render_template("index.html")
+
+
+@app.route('/version')
+def version():
+    return jsonify({
+        "status": 0,
+        "version": "732b715"
+    })
+
+
 @app.route('/welcome_api', methods=['POST'])
 def welcome():
     if sql.ifCreatedUser():
