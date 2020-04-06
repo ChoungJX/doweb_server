@@ -578,6 +578,8 @@ def image_pull(request):
     get_server_ip = get_server.server_ip
 
     get_image_name = request.json.get("image_name")
+    if ":" not in get_image_name:
+        get_image_name = "%s:latest"%(get_image_name)
 
     data = {
         'api': 'docker_socks',

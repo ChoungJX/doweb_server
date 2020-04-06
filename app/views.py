@@ -54,7 +54,7 @@ def about():
 def version():
     return jsonify({
         "status": 0,
-        "version": "732b715"
+        "version": "2aa4c44"
     })
 
 
