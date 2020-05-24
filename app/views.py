@@ -5,56 +5,11 @@ import flask_login
 from app import apis
 
 
-@app.route('/')
-def index():
-    return render_template("index.html")
-
-
-@app.route('/login')
-def login():
-    return render_template("index.html")
-
-
-@app.route('/welcome')
-def welcome_page():
-    return render_template("index.html")
-
-
-@app.route('/control/<args>')
-def control(args):
-    return render_template("index.html")
-
-
-@app.route('/control/<args>/<args2>')
-def control2(args, args2):
-    return render_template("index.html")
-
-
-@app.route('/control/<args>/<args2>/<args3>')
-def control3(args, args2, args3):
-    return render_template("index.html")
-
-
-@app.route('/user')
-def user():
-    return render_template("index.html")
-
-
-@app.route('/user/<args>')
-def user1(args):
-    return render_template("index.html")
-
-
-@app.route('/about')
-def about():
-    return render_template("index.html")
-
-
 @app.route('/version')
 def version():
     return jsonify({
         "status": 0,
-        "version": "2aa4c44"
+        "version": "5add954"
     })
 
 

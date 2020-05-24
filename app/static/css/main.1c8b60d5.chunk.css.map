@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,MACI,WAAY,CACZ,WAAY,CACZ,6BAAoC,CACpC,uBAAwB,CACxB,UAAW,CAIT,6BAHJ,CALA,kBACE,kBACF,CAFA,wBACE,eACF,CAHF,qBACE,eAAgB,CAChB,YAAa,CACb,gBACF","file":"main.1c8b60d5.chunk.css","sourcesContent":[".site-layout-content {\n  background: #fff;\n  padding: 24px;\n  min-height: 450px;\n}"]}

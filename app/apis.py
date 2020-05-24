@@ -579,7 +579,7 @@ def image_pull(request):
 
     get_image_name = request.json.get("image_name")
     if ":" not in get_image_name:
-        get_image_name = "%s:latest"%(get_image_name)
+        get_image_name = "%s:latest" % (get_image_name)
 
     data = {
         'api': 'docker_socks',
@@ -1086,6 +1086,13 @@ def user_delete(request):
 
 
 def user_create(request):
+    get_login_user = flask_login.current_user
+
+    if get_login_user.root_number != "100":
+        return jsonify({
+            'status': -2
+        })
+
     get_username = request.json.get("username")
     get_password = request.json.get("password")
     get_admin = request.json.get("ifadmin")
@@ -1231,6 +1238,13 @@ def search_user_by_name(request):
 
 
 def change_user(request):
+    get_login_user = flask_login.current_user
+
+    if get_login_user.root_number != "100":
+        return jsonify({
+            'status': -2
+        })
+
     get_id = request.json.get("id")
     get_u = User.query.filter_by(id=get_id).first()
 
@@ -1252,6 +1266,11 @@ def change_user(request):
     if get_admin:
         get_u.root_number = "100"
     else:
+        if(get_login_user.id == get_u.id):
+            return jsonify({
+                'status': -3,
+            })
+
         get_u.root_number = "0"
 
     db.session.commit()

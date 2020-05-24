@@ -1,5 +1,5 @@
 from app.models import *
-from app.Lib import uuid_generator
+from app.Lib import uuid_generator, time_util
 
 import flask_login
 
@@ -9,6 +9,13 @@ def login_as_user(username, password):
     if get_user:
         if get_user.password == password:
             flask_login.login_user(get_user)
+            new_login_history = LoginHistory(
+                uuid_generator.create_new_uuid(),
+                get_user.id,
+                time_util.get_now()
+            )
+            db.session.add(new_login_history)
+            db.session.commit()
             return True
 
     return False
@@ -33,8 +40,15 @@ def create_user(username, password, ifAdmin):
             password,
             "0"
         )
-    flask_login.login_user(new_user)
     db.session.add(new_user)
+    db.session.commit()
+    flask_login.login_user(new_user)
+    new_login_history = LoginHistory(
+        uuid_generator.create_new_uuid(),
+        new_user.id,
+        time_util.get_now()
+    )
+    db.session.add(new_login_history)
     db.session.commit()
     return True
 
