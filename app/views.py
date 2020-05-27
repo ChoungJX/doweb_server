@@ -9,7 +9,7 @@ from app import apis
 def version():
     return jsonify({
         "status": 0,
-        "version": "5add954"
+        "version": "3dde830"
     })
 
 
@@ -45,9 +45,11 @@ def api():
             return callback(request)
         else:
             callback = route_api_no_require_login.get(request.json.get('api'))
+            if not callback:
+                return jsonify({"status": -666, "message": "you have no access!"})
             return callback(request)
 
-    return jsonify({"ststus": 0, "message": "no api"})
+    return jsonify({"status": 0, "message": "no api"})
 
 
 route_api_no_require_login = {
