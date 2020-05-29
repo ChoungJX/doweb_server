@@ -1277,3 +1277,22 @@ def change_user(request):
     return jsonify({
         'status': 0,
     })
+
+
+def user_history_info(request):
+    get_all_history = LoginHistory.query.all()
+
+    result = list()
+    for i in get_all_history:
+        get_user = User.query.filter_by(id=i.u_id).first()
+        result.append({
+            'user': get_user.username,
+            "time": i.login_time,
+            'id': get_user.id,
+            "key": get_user.id
+        })
+    result.reverse()
+    return jsonify({
+        'status': 0,
+        "data": result
+    })

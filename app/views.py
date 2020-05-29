@@ -119,4 +119,5 @@ route_api = {
     'create_user': apis.user_create,
     'search_user_by_name': apis.search_user_by_name,
     'change_user': apis.change_user,
+    "user_history_info": apis.user_history_info
 }
