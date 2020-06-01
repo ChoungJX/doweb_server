@@ -112,6 +112,9 @@ def ifCreatedUser():
 def remove_user(u_uuid):
     get_user = User.query.filter_by(id=u_uuid).first()
     if get_user:
+        get_login_historys = LoginHistory.query.filter_by(u_id=u_uuid).all()
+        for i in get_login_historys:
+            db.session.delete(i)
         db.session.delete(get_user)
         db.session.commit()
         return 0

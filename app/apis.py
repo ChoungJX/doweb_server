@@ -202,6 +202,44 @@ def get_containers_info(request):
     )
 
 
+def container_log(request):
+    get_server_id = request.json.get('server_id')
+    get_server = Server.query.filter_by(id=get_server_id).first()
+    get_server_type = get_server.server_type
+    get_server_ip = get_server.server_ip
+
+    get_id = request.json.get("container_id")
+
+    # data = {
+    #     'api': 'docker_socks',
+    #     'url': '/containers/%s/logs?stdout=1&timestamps=1' % (get_id),
+    #     'method': 'GET',
+    #     'psw': 'tttest',
+    # }
+    data = {
+        "api": "docker_logs",
+        "psw": "tttest",
+        "args": {
+            "container_id": get_id
+        }
+    }
+    return2json = send_request.send_request(
+        get_server_type, get_server_ip, data)
+
+    result = list()
+    if return2json.get("status")==0:
+        temp = return2json.get("message")
+        result = temp.split("\n")
+
+    result.reverse()
+    return jsonify(
+        {
+            "status": 0,
+            'data': result,
+        }
+    )
+
+
 def container_delete(request):
     get_id = request.json.get("container_id")
     get_server_id = request.json.get('server_id')
@@ -368,30 +406,6 @@ def container_process(request):
     data = {
         'api': 'docker_socks',
         'url': '/containers/%s/top' % (get_container_id),
-        'method': "GET",
-        'psw': 'tttest',
-    }
-    return2json = send_request.send_request(
-        get_server_type, get_server_ip, data)
-
-    return jsonify(
-        {
-            'status': 0,
-            'data': return2json,
-        }
-    )
-
-
-def container_log(request):
-    get_server_id = request.json.get('server_id')
-    get_server = Server.query.filter_by(id=get_server_id).first()
-    get_server_type = get_server.server_type
-    get_server_ip = get_server.server_ip
-    get_container_id = request.json.get("container_id")
-
-    data = {
-        'api': 'docker_socks',
-        'url': '/containers/%s/logs' % (get_container_id),
         'method': "GET",
         'psw': 'tttest',
     }
@@ -1074,6 +1088,11 @@ def user_info(request):
 def user_delete(request):
     c_u = flask_login.current_user.id
     get_uid = request.json.get("user_id")
+
+    if flask_login.current_user.root_number != "100":
+        return jsonify({
+            'status': -2
+        })
 
     if c_u == get_uid:
         return jsonify({
