@@ -212,7 +212,7 @@ def container_log(request):
 
     # data = {
     #     'api': 'docker_socks',
-    #     'url': '/containers/%s/logs?stdout=1&timestamps=1' % (get_id),
+    #     'url': '/containers/%s/logs?stdout=1\&timestamps=1' % (get_id),
     #     'method': 'GET',
     #     'psw': 'tttest',
     # }
@@ -227,7 +227,7 @@ def container_log(request):
         get_server_type, get_server_ip, data)
 
     result = list()
-    if return2json.get("status")==0:
+    if return2json.get("status") == 0:
         temp = return2json.get("message")
         result = temp.split("\n")
 
@@ -674,7 +674,12 @@ def image_create_from_container(request):
     send_url = "%s?container=%s" % (send_url, get_container_id)
 
     get_image_name = request.json.get("image_name")
-    send_url = "%s&repo=%s" % (send_url, get_image_name)
+    send_url = "%s\\&repo=%s" % (send_url, get_image_name)
+
+    get_version = request.json.get("version")
+    send_url = "%s\\&tag=%s" % (send_url, get_version)
+
+    print(send_url)
     # ========================
 
     data = {
