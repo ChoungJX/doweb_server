@@ -9,7 +9,7 @@ from app import apis
 def version():
     return jsonify({
         "status": 0,
-        "version": "3dde830"
+        "version": ""
     })
 
 
