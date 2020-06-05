@@ -1075,12 +1075,20 @@ def system_use(request):
 
 
 def psw_check(request):
-    return jsonify(
-        {
-            'id': app.sql.get_certification(),
-            'status': 0
-        }
-    )
+    if flask_login.current_user.root_number == "-1":
+        return jsonify(
+            {
+                'id': "暂无权限查看!",
+                'status': 0
+            }
+        )
+    else:
+        return jsonify(
+            {
+                'id': app.sql.get_certification(),
+                'status': 0
+            }
+        )
 
 
 def user_info(request):
@@ -1152,16 +1160,24 @@ def server_ssh_info(request):
         get_server_psw = get_server_psw.encode()
         get_server_psw = base64.b64encode(get_server_psw).decode()
 
-        return jsonify(
-            {
-                'status': 0,
-                'data': {
-                    'ip': get_server_ip,
-                    'user': get_server_user,
-                    'psw': get_server_psw,
+        if flask_login.current_user.root_number == "-1":
+            return jsonify(
+                {
+                    'status': -999,
+                    'message': "无权限执行该操作！"
                 }
-            }
-        )
+            )
+        else:
+            return jsonify(
+                {
+                    'status': 0,
+                    'data': {
+                        'ip': get_server_ip,
+                        'user': get_server_user,
+                        'psw': get_server_psw,
+                    }
+                }
+            )
     else:
         if flask_login.current_user.root_number == "100":
             return jsonify(
