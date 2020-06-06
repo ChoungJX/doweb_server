@@ -52,7 +52,7 @@ def api():
                 return jsonify({"status": -666, "message": "you have no access!"})
             return callback(request)
 
-    return jsonify({"status": 0, "message": "no api"})
+    return jsonify({"status": -1000, "message": "no api"})
 
 
 route_api_no_require_login = {
@@ -164,5 +164,6 @@ guest_route_api = {
 
 access_route_management = {
     '100': route_api,
+    '0': route_api,
     '-1': guest_route_api
 }
