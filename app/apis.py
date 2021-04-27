@@ -210,26 +210,26 @@ def container_log(request):
 
     get_id = request.json.get("container_id")
 
-    # data = {
-    #     'api': 'docker_socks',
-    #     'url': '/containers/%s/logs?stdout=1\&timestamps=1' % (get_id),
-    #     'method': 'GET',
-    #     'psw': 'tttest',
-    # }
     data = {
-        "api": "docker_logs",
-        "psw": "tttest",
-        "args": {
-            "container_id": get_id
-        }
+        'api': 'docker_socks',
+        'url': '/containers/%s/logs?stdout=true&timestamps=true' % (get_id),
+        'method': 'GET',
+        'psw': 'tttest',
     }
+    # data = {
+    #     "api": "docker_logs",
+    #     "psw": "tttest",
+    #     "args": {
+    #         "container_id": get_id
+    #     }
+    # }
     return2json = send_request.send_request(
         get_server_type, get_server_ip, data)
 
     result = list()
     if return2json.get("status") == 0:
-        temp = return2json.get("message")
-        result = temp.split("\n")
+        temp = return2json.get("data")
+        result = temp.split("\r\n")
 
     result.reverse()
     return jsonify(
